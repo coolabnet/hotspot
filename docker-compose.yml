@@ -70,6 +70,9 @@ services:
     build: ssb
     privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
     network_mode: host
+    environment:
+      DBUS_SYSTEM_BUS_ADDRESS: unix:path=/host/run/dbus/system_bus_socket
+      APP_JSON: "8813:invite.json"
     volumes:
       - 'ssb-data:/.ssb' # Only required if using PERSISTENT flag (see below)
     labels:
@@ -92,6 +95,7 @@ services:
     environment:
       APP_UI: "5001/webui"
       APP_TITLE: "Syncronização de arquivos"
+      DBUS_SYSTEM_BUS_ADDRESS: unix:path=/host/run/dbus/system_bus_socket
     volumes:
       - 'sync-download:/data/ipfs' # Only required if using PERSISTENT flag (see below)
       - 'sync-staging:/export' # Only required if using PERSISTENT flag (see below)
