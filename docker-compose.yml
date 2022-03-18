@@ -42,7 +42,7 @@ services:
       - db
   # https://hub.docker.com/_/mariadb/
   db:
-    image: arm64v8/mariadb
+    build: db
     volumes:
       - db:/var/lib/mysql
     environment:
@@ -66,37 +66,36 @@ services:
       APP_TITLE: "Navegador de Arquivos"
     command: -- c
   # TODO: ssb-pub
-  ssb:
-    build: ssb
-    privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
-    network_mode: host
-    volumes:
-      - 'ssb-data:/.ssb' # Only required if using PERSISTENT flag (see below)
-  sync:
-    build: sync
-    privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
-    network_mode: host
-    environment:
-      APP_UI: "5001/webui"
-      APP_TITLE: "Syncronização de arquivos"
-    volumes:
-      - 'sync-download:/data/ipfs' # Only required if using PERSISTENT flag (see below)
-      - 'sync-staging:/export' # Only required if using PERSISTENT flag (see below)
-      - 'media:/data'
-    ports:
-      - 4001:4001
-      - 5001:5001
-      - 8080:8080
-    labels:
-      io.balena.features.balena-socket: '1'
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.firmware: '1'
-      io.balena.features.dbus: '1'
-      io.balena.features.sysfs: '1'
-      io.balena.features.procfs: '1'
-      io.balena.features.journal-logs: '1'
-      io.balena.features.supervisor-api: '1'
-      io.balena.features.balena-api: '1'
-      io.balena.update.strategy: download-then-kill
-      io.balena.update.handover-timeout: ''
-
+  # ssb:
+  #   build: ssb
+  #   privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
+  #   network_mode: host
+  #   volumes:
+  #     - 'ssb-data:/.ssb' # Only required if using PERSISTENT flag (see below)
+  # sync:
+  #   build: sync
+  #   privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
+  #   network_mode: host
+  #   environment:
+  #     APP_UI: "5001/webui"
+  #     APP_TITLE: "Syncronização de arquivos"
+  #   volumes:
+  #     - 'sync-download:/data/ipfs' # Only required if using PERSISTENT flag (see below)
+  #     - 'sync-staging:/export' # Only required if using PERSISTENT flag (see below)
+  #     - 'media:/data'
+  #   ports:
+  #     - 4001:4001
+  #     - 5001:5001
+  #     - 8080:8080
+  #   labels:
+  #     io.balena.features.balena-socket: '1'
+  #     io.balena.features.kernel-modules: '1'
+  #     io.balena.features.firmware: '1'
+  #     io.balena.features.dbus: '1'
+  #     io.balena.features.sysfs: '1'
+  #     io.balena.features.procfs: '1'
+  #     io.balena.features.journal-logs: '1'
+  #     io.balena.features.supervisor-api: '1'
+  #     io.balena.features.balena-api: '1'
+  #     io.balena.update.strategy: download-then-kill
+  #     io.balena.update.handover-timeout: ''
