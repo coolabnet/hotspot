@@ -1,0 +1,12 @@
+FROM balenalib/%%BALENA_MACHINE_NAME%%-debian
+
+RUN install_packages wget
+
+# FROM debian
+# RUN apt update && apt install wget -y
+WORKDIR /usr/src/app
+ARG VERSION="4.0.0-pre.5"
+RUN wget "https://github.com/ahdinosaur/ssb-pub/releases/download/v4.0.0-pre.5/ssb-pub_4.0.0-pre.5_armhf_v7.deb"
+RUN chmod +x ssb-pub_4.0.0-pre.5_armhf_v7.deb
+RUN dpkg -i ssb-pub_4.0.0-pre.5_armhf_v7.deb
+CMD ["ssb-pub"]
