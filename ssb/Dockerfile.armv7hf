@@ -1,6 +1,6 @@
 FROM balenalib/%%BALENA_MACHINE_NAME%%-debian
 
-RUN install_packages wget
+RUN install_packages wget dbus systemd avahi-daemon libnss-mdns apache2
 
 # FROM debian
 # RUN apt update && apt install wget -y
@@ -9,4 +9,19 @@ ARG VERSION="4.0.0-pre.5"
 RUN wget "https://github.com/ahdinosaur/ssb-pub/releases/download/v4.0.0-pre.5/ssb-pub_4.0.0-pre.5_armhf_v7.deb"
 RUN chmod +x ssb-pub_4.0.0-pre.5_armhf_v7.deb
 RUN dpkg -i ssb-pub_4.0.0-pre.5_armhf_v7.deb
-CMD ["ssb-pub"]
+RUN systemctl mask \
+    dev-hugepages.mount \
+    sys-fs-fuse-connections.mount \
+    sys-kernel-config.mount \
+    display-manager.service \
+    getty@.service \
+    systemd-logind.service \
+    systemd-remount-fs.service \
+    getty.target \
+    graphical.target
+
+STOPSIGNAL 37
+COPY config/* /etc/apache2/
+
+COPY start.sh .
+CMD ["bash", "start.sh"]

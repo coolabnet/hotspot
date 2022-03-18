@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 
 # ssb
+echo 'Cleaning up' # Necessary: https://github.com/cryptoscope/ssb/issues/124
+rm -rf /var/lib/ssb-pub/sublogs/shared-badger/
+# ssb-pub-go -repo /var/lib/ssb-pub -fsck sequences -repair
 echo 'Starting ssb pub'
 ssb-pub &
 sleep 10
 echo 'POSTing ssb invite'
-ssb-cli invite create --uses 9999
+ssb-cli invite create --uses 9999 > /var/www/html/invite.json
+
+# apache
+source /etc/apache2/envvars
+mkdir /var/run/apache2
+/usr/sbin/apache2
+
 # mdns
 set -m
 
