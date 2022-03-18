@@ -1,6 +1,6 @@
 FROM  ipfs/go-ipfs:master-latest
 
-COPY config /data/ipfs/
+# COPY config /data/ipfs/
 
 # TODO add mdns?
 # RUN install_packages dbus systemd avahi-daemon libnss-mdns
