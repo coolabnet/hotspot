@@ -68,52 +68,19 @@ services:
   # TODO: ssb-pub
   ssb:
     build: ssb
-    privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
     network_mode: host
     environment:
-      DBUS_SYSTEM_BUS_ADDRESS: unix:path=/host/run/dbus/system_bus_socket
       APP_JSON: "8813:invite.json"
     volumes:
-      - 'ssb-data:/var/lib/ssb-pub' # Only required if using PERSISTENT flag (see below)
-    labels:
-      io.balena.features.balena-socket: '1'
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.firmware: '1'
-      io.balena.features.dbus: '1'
-      io.balena.features.sysfs: '1'
-      io.balena.features.procfs: '1'
-      io.balena.features.journal-logs: '1'
-      io.balena.features.supervisor-api: '1'
-      io.balena.features.balena-api: '1'
-      io.balena.update.strategy: download-then-kill
-      io.balena.update.handover-timeout: ''
-
+      - 'ssb-data:/root/.ssb-go'
+    restart: unless-stopped
   sync:
-    build: sync
-    privileged: true # required for UDEV to find plugged in peripherals such as a USB mouse
+    image: ipfs/go-ipfs:master-latest
     network_mode: host
     environment:
       APP_UI: "5001/webui"
       APP_TITLE: "Syncronização de arquivos"
-      DBUS_SYSTEM_BUS_ADDRESS: unix:path=/host/run/dbus/system_bus_socket
     volumes:
-      - 'sync-download:/data/ipfs' # Only required if using PERSISTENT flag (see below)
-      - 'sync-staging:/export' # Only required if using PERSISTENT flag (see below)
+      - 'sync-download:/data/ipfs'
+      - 'sync-staging:/export'
       - 'media:/data'
-    ports:
-      - 4001:4001
-      - 5001:5001
-      - 8080:8080
-    labels:
-      io.balena.features.balena-socket: '1'
-      io.balena.features.kernel-modules: '1'
-      io.balena.features.firmware: '1'
-      io.balena.features.dbus: '1'
-      io.balena.features.sysfs: '1'
-      io.balena.features.procfs: '1'
-      io.balena.features.journal-logs: '1'
-      io.balena.features.supervisor-api: '1'
-      io.balena.features.balena-api: '1'
-      io.balena.update.strategy: download-then-kill
-      io.balena.update.handover-timeout: ''
-
