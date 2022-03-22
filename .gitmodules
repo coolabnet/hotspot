@@ -1,0 +1,3 @@
+[submodule "go-ipfs"]
+	path = go-ipfs
+	url = git@github.com:coolabnet/go-ipfs.git
