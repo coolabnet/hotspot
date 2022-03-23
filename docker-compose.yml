@@ -74,8 +74,8 @@ services:
     volumes:
       - 'ssb-data:/root/.ssb-go'
     restart: unless-stopped
-  sync:
-    build: go-ipfs
+  ipfs:
+    build: ipfs
     network_mode: host
     environment:
       APP_UI: "5001/webui"

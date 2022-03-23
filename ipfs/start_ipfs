@@ -1,0 +1,18 @@
+#balena ----
+#now let's configure it to accept local network connections
+IP=$(wget -qO- "$BALENA_SUPERVISOR_ADDRESS/v1/device?apikey=$BALENA_SUPERVISOR_API_KEY"| jq -r .ip_address)
+NAME=$(wget -qO- "$BALENA_SUPERVISOR_ADDRESS/v1/device/host-config?apikey=$BALENA_SUPERVISOR_API_KEY"| jq -r .network.hostname)
+
+J='['
+J_FORMAT='"http://%s:5001", '
+
+for one_ip in $IP ; do
+J=$J$(printf "$J_FORMAT" "$one_ip")
+done
+
+J_FORMAT='"http://%s.local:5001", "http://localhost:3000", "http://127.0.0.1:5001", "https://webui.ipfs.io"]'
+J=$J$(printf  "$J_FORMAT" "$NAME")
+
+
+ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "$J"
+ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST"]'
