@@ -22,7 +22,7 @@ RUN cp /tmp/go-ipfs/go.sum $SRC_DIR/
 RUN cd $SRC_DIR \
   && go mod download
 
-RUN cp /tmp/go-ipfs $SRC_DIR
+RUN cp /tmp/go-ipfs/* $SRC_DIR/
 COPY start_ipfs $SRC_DIR
 # Preload an in-tree but disabled-by-default plugin by adding it to the IPFS_PLUGINS variable
 # e.g. docker build --build-arg IPFS_PLUGINS="foo bar baz"
