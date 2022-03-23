@@ -22,7 +22,7 @@ RUN cp /tmp/go-ipfs/go.sum $SRC_DIR/
 RUN cd $SRC_DIR \
   && go mod download
 
-RUN cp /tmp/go-ipfs/* $SRC_DIR/
+RUN cp -r /tmp/go-ipfs/* $SRC_DIR/
 COPY start_ipfs $SRC_DIR
 # Preload an in-tree but disabled-by-default plugin by adding it to the IPFS_PLUGINS variable
 # e.g. docker build --build-arg IPFS_PLUGINS="foo bar baz"
@@ -53,7 +53,7 @@ RUN set -eux; \
   && wget -q -O tini https://github.com/krallin/tini/releases/download/$TINI_VERSION/$tiniArch \
   && chmod +x tini
 
-RUN cat start_ipfs > $SRC_DIR/bin/container_daemon
+RUN cat $SRC_DIR/start_ipfs > $SRC_DIR/bin/container_daemon
 
 # Now comes the actual target image, which aims to be as small as possible.
 FROM busybox:1.31.1-glibc
