@@ -4,6 +4,7 @@ LABEL maintainer="Steven Allen <steven@stebalien.com>"
 
 # Install deps
 RUN apt-get update && apt-get install -y \
+  git \
   libssl-dev \
   ca-certificates \
   fuse \
@@ -11,13 +12,18 @@ RUN apt-get update && apt-get install -y \
 
 ENV SRC_DIR /go-ipfs
 
+
+RUN cd /tmp && git clone https://github.com/ipfs/go-ipfs.git
 # Download packages first so they can be cached.
-COPY go.mod go.sum $SRC_DIR/
+RUN ls /tmp/
+RUN mkdir $SRC_DIR
+RUN cp /tmp/go-ipfs/go.mod $SRC_DIR/
+RUN cp /tmp/go-ipfs/go.sum $SRC_DIR/
 RUN cd $SRC_DIR \
   && go mod download
 
-COPY . $SRC_DIR
-
+COPY /tmp/go-ipfs $SRC_DIR
+COPY start_ipfs $SRC_DIR
 # Preload an in-tree but disabled-by-default plugin by adding it to the IPFS_PLUGINS variable
 # e.g. docker build --build-arg IPFS_PLUGINS="foo bar baz"
 ARG IPFS_PLUGINS
