@@ -81,8 +81,8 @@ services:
     volumes:
       - 'ssb-data:/root/.ssb-go'
     restart: unless-stopped
-  sync:
-    image: ipfs/go-ipfs:master-latest
+  ipfs:
+    build: ipfs
     network_mode: host
     environment:
       APP_UI: "5001/webui"
@@ -91,3 +91,5 @@ services:
       - 'sync-download:/data/ipfs'
       - 'sync-staging:/export'
       - 'media:/data'
+    labels:
+      io.balena.features.supervisor-api: '1'
