@@ -16,3 +16,6 @@ J=$J$(printf  "$J_FORMAT" "$NAME")
 
 ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "$J"
 ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods '["PUT", "POST"]'
+
+exec ipfs "$@"
+
