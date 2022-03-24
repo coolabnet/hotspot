@@ -1,1 +1,0 @@
-FROM linuxserver/mariadb:latest@sha256:cab593d45a21411a2eb2873e0ac78d04adbf79540c31228fee2236bd5a0c40ee

@@ -34,7 +34,10 @@ services:
   # https://hub.docker.com/r/jc21/nginx-proxy-manager/
   proxy:
     build: proxy
-    network_mode: host
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
     volumes:
       - proxy:/data
       - certs:/etc/letsencrypt
@@ -42,11 +45,15 @@ services:
       - db
   # https://hub.docker.com/_/mariadb/
   db:
-    build: db
+    image: lscr.io/linuxserver/mariadb
+    restart: unless-stopped
     volumes:
-      - db:/var/lib/mysql
+      - db:/config
     environment:
-      MARIADB_ROOT_PASSWORD: 'npm'
+      PUID: 1000
+      PGID: 1000
+      TZ: America/Brasil
+      MYSQL_ROOT_PASSWORD: 'npm'
       MYSQL_DATABASE: 'npm'
       MYSQL_USER: 'npm'
       MYSQL_PASSWORD: 'npm'
