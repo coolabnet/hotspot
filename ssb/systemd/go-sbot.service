@@ -1,0 +1,9 @@
+[Unit]
+Description=go-sbot startup script
+
+[Service]
+ExecStart=/usr/bin/go-sbot
+Environment="LIBRARIAN_WRITEALL=0"
+
+[Install]
+WantedBy=default.target

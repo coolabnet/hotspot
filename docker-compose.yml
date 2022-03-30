@@ -80,7 +80,12 @@ services:
       APP_JSON: "8813:invite.json"
     volumes:
       - 'ssb-data:/root/.ssb-go'
+    privileged: true
     restart: unless-stopped
+    tmpfs:
+      - /tmp
+      - /run
+      - /run/lock
   ipfs:
     build: ipfs
     network_mode: host

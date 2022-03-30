@@ -28,10 +28,15 @@ COPY systemd/go-sbot.service /etc/systemd/system/go-sbot.service
 
 ARG VERSION="0.6.0"
 
-RUN wget http://releases.peachcloud.org/peach-web_v$VERSION.tar.gz && tar -xvzf peach-web_v$VERSION.tar.gz \
-  mkdir /usr/src/app/peach-web_v$VERSION
+WORKDIR /usr/src/app/
+
+RUN wget http://releases.peachcloud.org/peach-web_v$VERSION.tar.gz && tar -xvzf peach-web_v$VERSION.tar.gz 
+
+WORKDIR /usr/src/app/peach-web_v$VERSION
+RUN pwd
 COPY install-docker.sh /usr/src/app/peach-web_v$VERSION
-RUN /usr/src/app/peach-web_v$VERSION/install-docker.sh
+RUN ./install-docker.sh
+
 
 
 

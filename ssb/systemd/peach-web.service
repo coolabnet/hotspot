@@ -1,0 +1,13 @@
+[Unit]
+Description=peach-web startup script
+
+[Service]
+WorkingDirectory=/usr/share/peach-web
+Environment="ADDR=0.0.0.0"
+Environment="PORT=8000"
+Environment="RUST_LOG=info"
+ExecStart=/usr/bin/peach-web
+Restart=always
+
+[Install]
+WantedBy=default.target
