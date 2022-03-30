@@ -81,6 +81,8 @@ services:
     volumes:
       - 'ssb-data:/root/.ssb-go'
     restart: unless-stopped
+    labels:
+      io.balena.features.dbus: '1'
   ipfs:
     build: ipfs
     network_mode: host

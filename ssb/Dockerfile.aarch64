@@ -3,9 +3,9 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-debian
 RUN apt update && apt install -y wget systemd dbus
 WORKDIR /usr/src/app
 ARG VERSION="0.6.0"
-RUN wget "https://ahau.luandro.com/peach-web_%%BALENA_ARCH%%_v$VERSION.tar.gz"
-RUN tar -xf peach-web_%%BALENA_ARCH%%_v$VERSION.tar.gz
-RUN bash "peach-web_%%BALENA_ARCH%%_v$VERSION/install.sh"
+RUN wget "https://ahau.luandro.com/peach-web_aarch64_v$VERSION.tar.gz"
+RUN tar -xf peach-web_aarch64_v$VERSION.tar.gz
+RUN bash "peach-web_aarch64_v$VERSION/install.sh"
 EXPOSE 8008
 EXPOSE 8000
 COPY start.sh .
