@@ -33,10 +33,9 @@ WORKDIR /usr/src/app/
 RUN wget http://releases.peachcloud.org/peach-web_v$VERSION.tar.gz && tar -xvzf peach-web_v$VERSION.tar.gz
 
 WORKDIR /usr/src/app/peach-web_v$VERSION
-RUN pwd
-COPY install-docker.sh /usr/src/app/peach-web_v$VERSION
-RUN ./install-docker.sh
 
+COPY install-docker.sh /usr/src/app/peach-web_v$VERSION
+RUN bash /usr/src/app/peach-web_v$VERSION/install-docker.sh
 
 
 

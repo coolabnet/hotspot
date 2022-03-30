@@ -9,7 +9,7 @@ echo "[ determining host cpu architecture ]"
 arch=$(uname -m)
 
 echo $arch
-pwd
+
 if [[ $arch == 'amd64' ]] || [[ $arch == 'aarch64' ]]
 then
   echo "[ installing arm64 binaries ]"
