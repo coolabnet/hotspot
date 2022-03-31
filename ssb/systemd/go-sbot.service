@@ -6,4 +6,4 @@ ExecStart=/usr/bin/go-sbot
 Environment="LIBRARIAN_WRITEALL=0"
 
 [Install]
-WantedBy=default.target
+WantedBy=basic.target
