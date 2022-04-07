@@ -1,9 +1,9 @@
 version: '2.1'
 
 volumes:
-  proxy:
-  certs:
-  db:
+  # proxy:
+  # certs:
+  # db:
   media:
   sync-download:
   sync-staging:
@@ -11,18 +11,24 @@ volumes:
 services:
   # https://github.com/balenablocks/wifi-connect
   wifi:
-    build: wifi
+    build: wifi-repeater
     restart: always
     network_mode: host
     privileged: true
     labels:
       io.balena.features.dbus: '1'
       io.balena.features.firmware: '1'
-    environment:
-      PORTAL_SSID: "P2P Hotspot"
-      PORTAL_LISTENING_PORT: 8081
-      APP_UI: 8081
-      APP_TITLE: "Conexão de WiFi"
+
+  captive-portal:
+    build: captive-portal
+    restart: always
+    network_mode: host
+    privileged: true
+    labels:
+      io.balena.features.dbus: '1'
+      io.balena.features.supervisor-api: '1'
+
+
   # https://github.com/balenablocks/hostname
   hostname:
     image: balenablocks/hostname
@@ -32,33 +38,33 @@ services:
     environment:
       SET_HOSTNAME: p2p
   # https://hub.docker.com/r/jc21/nginx-proxy-manager/
-  proxy:
-    build: proxy
-    ports:
-      - '80:80'
-      - '81:81'
-      - '443:443'
-    volumes:
-      - proxy:/data
-      - certs:/etc/letsencrypt
-    depends_on:
-      - db
+  # proxy:
+  #   build: proxy
+  #   ports:
+  #     - '80:80'
+  #     - '81:81'
+  #     - '443:443'
+  #   volumes:
+  #     - proxy:/data
+  #     - certs:/etc/letsencrypt
+  #   depends_on:
+  #     - db
   # https://hub.docker.com/_/mariadb/
-  db:
-    image: lscr.io/linuxserver/mariadb
-    restart: unless-stopped
-    volumes:
-      - db:/config
-    environment:
-      PUID: 1000
-      PGID: 1000
-      TZ: America/Brasil
-      MYSQL_ROOT_PASSWORD: 'npm'
-      MYSQL_DATABASE: 'npm'
-      MYSQL_USER: 'npm'
-      MYSQL_PASSWORD: 'npm'
-    ports:
-      - '3306:3306'
+  # db:
+  #   image: lscr.io/linuxserver/mariadb
+  #   restart: unless-stopped
+  #   volumes:
+  #     - db:/config
+  #   environment:
+  #     PUID: 1000
+  #     PGID: 1000
+  #     TZ: America/Brasil
+  #     MYSQL_ROOT_PASSWORD: 'npm'
+  #     MYSQL_DATABASE: 'npm'
+  #     MYSQL_USER: 'npm'
+  #     MYSQL_PASSWORD: 'npm'
+  #   ports:
+  #     - '3306:3306'
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
     image: filebrowser/filebrowser
@@ -81,15 +87,15 @@ services:
     volumes:
       - 'ssb-data:/root/.ssb-go'
     restart: unless-stopped
-  ipfs:
-    build: ipfs
-    network_mode: host
-    environment:
-      APP_UI: "5001/webui"
-      APP_TITLE: "Syncronização de arquivos"
-    volumes:
-      - 'sync-download:/data/ipfs'
-      - 'sync-staging:/export'
-      - 'media:/data'
-    labels:
-      io.balena.features.supervisor-api: '1'
+  # ipfs:
+  #   build: ipfs
+  #   network_mode: host
+  #   environment:
+  #     APP_UI: "5001/webui"
+  #     APP_TITLE: "Syncronização de arquivos"
+  #   volumes:
+  #     - 'sync-download:/data/ipfs'
+  #     - 'sync-staging:/export'
+  #     - 'media:/data'
+  #   labels:
+  #     io.balena.features.supervisor-api: '1'
