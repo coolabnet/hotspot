@@ -1,9 +1,9 @@
 version: '2.1'
 
 volumes:
-  # proxy:
-  # certs:
-  # db:
+  proxy:
+  certs:
+  db:
   media:
   sync-download:
   sync-staging:
@@ -38,33 +38,33 @@ services:
     environment:
       SET_HOSTNAME: p2p
   # https://hub.docker.com/r/jc21/nginx-proxy-manager/
-  # proxy:
-  #   build: proxy
-  #   ports:
-  #     - '80:80'
-  #     - '81:81'
-  #     - '443:443'
-  #   volumes:
-  #     - proxy:/data
-  #     - certs:/etc/letsencrypt
-  #   depends_on:
-  #     - db
+  proxy:
+    build: proxy
+    ports:
+      - '80:80'
+      - '81:81'
+      - '443:443'
+    volumes:
+      - proxy:/data
+      - certs:/etc/letsencrypt
+    depends_on:
+      - db
   # https://hub.docker.com/_/mariadb/
-  # db:
-  #   image: lscr.io/linuxserver/mariadb
-  #   restart: unless-stopped
-  #   volumes:
-  #     - db:/config
-  #   environment:
-  #     PUID: 1000
-  #     PGID: 1000
-  #     TZ: America/Brasil
-  #     MYSQL_ROOT_PASSWORD: 'npm'
-  #     MYSQL_DATABASE: 'npm'
-  #     MYSQL_USER: 'npm'
-  #     MYSQL_PASSWORD: 'npm'
-  #   ports:
-  #     - '3306:3306'
+  db:
+    image: lscr.io/linuxserver/mariadb
+    restart: unless-stopped
+    volumes:
+      - db:/config
+    environment:
+      PUID: 1000
+      PGID: 1000
+      TZ: America/Brasil
+      MYSQL_ROOT_PASSWORD: 'npm'
+      MYSQL_DATABASE: 'npm'
+      MYSQL_USER: 'npm'
+      MYSQL_PASSWORD: 'npm'
+    ports:
+      - '3306:3306'
   # https://hub.docker.com/r/filebrowser/filebrowser
   filebrowser:
     image: filebrowser/filebrowser
