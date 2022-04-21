@@ -87,6 +87,10 @@ services:
     volumes:
       - 'ssb-data:/root/.ssb-go'
     restart: unless-stopped
+  portal:
+    build: portal
+    ports:
+      - '3000:3000'
   # ipfs:
   #   build: ipfs
   #   network_mode: host
