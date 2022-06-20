@@ -83,3 +83,10 @@ Meant to run on [Balena](https://balena.io), which runs easily composable servic
 
 - Support more simultaneous users and extend wifi range with a router
 - Extend router's wifi range by setting up a mesh network with your neighbors
+
+## TODO
+### V1
+- Add service that scrapes latest apks and installers and serves them as f-droid and dat-installer repositories
+- Have the pub publish an about photo
+### V2
+- Add dnsmasq to wifi-repeater and configure proxy

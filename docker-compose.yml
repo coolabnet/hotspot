@@ -80,7 +80,7 @@ services:
     command: -- c
   # TODO: ssb-pub
   ssb:
-    build: ssb
+    image: communityfirst/ssb-go-pub:latest
     network_mode: host
     environment:
       APP_JSON: "8813:invite.json"
