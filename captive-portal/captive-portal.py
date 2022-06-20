@@ -8,16 +8,11 @@ import os
 # These variables are used as settings
 PORT       = 9090         # the port in which the captive portal web server listens
 IFACE      = "wlan0"      # the interface that captive portal protects
-#IP_ADDRESS = "172.16.0.1" # the ip address of the captive portal (it can be the IP of IFACE)
-#IP_ADDRESS = "172.16.0.1" # the ip address of the captive portal (it can be the IP of IFACE)
+PORT_PORTAL= 3000
 
-##TODO: find the wlan0 address using ip a dev wlan0
-WGET = subprocess.Popen (['wget', '-qO-', os.environ["BALENA_SUPERVISOR_ADDRESS"]+"/v1/device?apikey="+os.environ["BALENA_SUPERVISOR_API_KEY"]],  stdout=subprocess.PIPE)
-output = subprocess.check_output ([ "jq", "-r", ".ip_address" ], stdin=WGET.stdout).split()
-WGET.wait()
-
-IP_ADDRESS = output[1]
-
+ip_pipe = subprocess.Popen(['ip', 'r'],  stdout=subprocess.PIPE)
+interface_pipe = subprocess.Popen (['grep', 'wlan0'], stdin=ip_pipe.stdout, stdout=subprocess.PIPE)
+IP_ADDRESS = subprocess.check_output (['cut', '-d', ' ', '-f', '9'], stdin=interface_pipe.stdout).split()[0]
 
 '''
 This it the http server used by the the captive portal
@@ -28,24 +23,13 @@ class CaptivePortal(BaseHTTPServer.BaseHTTPRequestHandler):
     html_redirect = """
     <html>
     <head>
-        <meta http-equiv="refresh" content="0; url=http://%s:%s/login" />
+        <meta http-equiv="refresh" content="0; url=http://%s:%s" />
     </head>
     <body>
         <b>Redirecting to login page</b>
     </body>
     </html>
-    """%(IP_ADDRESS, PORT)
-    #the login page
-    html_login = """
-    <html>
-    <body>
-        <b>Login Form</b>
-        <form method="POST" action="do_login">
-        <input type="submit" value="click to access internet">
-        </form>
-    </body>
-    </html>
-    """
+    """%(IP_ADDRESS, PORT_PORTAL)
 
     '''
     if the user requests the login page show it, else
@@ -65,7 +49,7 @@ class CaptivePortal(BaseHTTPServer.BaseHTTPRequestHandler):
     '''
     def do_POST(self):
         self.send_response(200)
-        self.send_header("Content-type", "text/html")
+        self.send_header("Content-type", "application/json")
         self.end_headers()
         form = cgi.FieldStorage(
             fp=self.rfile,
@@ -79,11 +63,11 @@ class CaptivePortal(BaseHTTPServer.BaseHTTPRequestHandler):
         # if username == 'nikos' and password == 'fotiou':
             #authorized user
         remote_IP = self.client_address[0]
-        print 'New authorization from '+ remote_IP
-        print 'Updating IP tables'
+        print ('New authorization from '+ remote_IP)
+        print ('Updating IP tables')
         subprocess.call(["iptables","-t", "nat", "-I", "PREROUTING","1", "-s", remote_IP, "-j" ,"ACCEPT"])
         subprocess.call(["iptables", "-I", "FORWARD", "-s", remote_IP, "-j" ,"ACCEPT"])
-        self.wfile.write("You are now authorized. Navigate to any URL")
+        self.wfile.write("{success: true, ip:" + remote_IP + "}")
         # else:
         #     #show the login form
         #     self.wfile.write(self.html_login)
@@ -111,6 +95,11 @@ print "Starting web server"
 httpd = BaseHTTPServer.HTTPServer(('', PORT), CaptivePortal)
 print "Redirecting HTTP traffic to captive portal"
 subprocess.call(["iptables", "-t", "nat", "-A", "PREROUTING", "-i", IFACE, "-p", "tcp", "--dport", "80", "-j" ,"DNAT", "--to-destination", IP_ADDRESS+":"+str(PORT)])
+
+# TODO: Allow F-Droid repository IPs
+# 148.251.140.42 149.202.95.241
+# 		$iptables -t mangle -A pirania -m set --match-set pirania-allowlist-$ipvX dst -j RETURN
+#
 
 try:
     httpd.serve_forever()
