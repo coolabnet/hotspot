@@ -7,7 +7,7 @@ volumes:
   ssb-data:
 services:
   # https://github.com/balenablocks/wifi-connect
-  wifi:
+  wifi-repeater:
     build: wifi-repeater
     restart: always
     network_mode: host
@@ -23,9 +23,6 @@ services:
     privileged: true
     labels:
       io.balena.features.dbus: '1'
-      io.balena.features.supervisor-api: '1'
-
-
   # https://github.com/balenablocks/hostname
   hostname:
     image: balenablocks/hostname
@@ -47,7 +44,7 @@ services:
       APP_UI: 83
       APP_TITLE: "Navegador de Arquivos"
     command: -- c
-  # TODO: ssb-pub
+  # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
   ssb:
     image: communityfirst/ssb-go-pub:latest
     network_mode: host

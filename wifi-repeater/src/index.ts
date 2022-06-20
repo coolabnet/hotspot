@@ -8,8 +8,8 @@ import {
 } from "./nm";
 
 // defaults
-const AP_SSID = process.env.AP_SSID || `WiFi Repeater`;
-const AP_PASSWORD = process.env.AP_PASSWORD || 'charlietheunicorn';
+const AP_SSID = process.env.AP_SSID || `P2PHotspot`;
+const AP_PASSWORD = process.env.AP_PASSWORD ? (process.env.AP_PASSWORD.length < 8 ? null : process.env.AP_PASSWORD) : null;
 const WIFI_SSID = process.env.WIFI_SSID;
 const WIFI_PASSWORD = process.env.WIFI_PASSWORD;
 

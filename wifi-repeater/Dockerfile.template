@@ -3,7 +3,6 @@ FROM balenalib/%%BALENA_MACHINE_NAME%%-node:12-build as builder
 
 WORKDIR /usr/src
 
-RUN install_packages python
 RUN npm install blinking
 
 # Run stage

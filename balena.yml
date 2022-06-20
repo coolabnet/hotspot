@@ -15,14 +15,15 @@ assets:
         https://raw.githubusercontent.com/coolabnet/hotspot/main/logo.png
 data:
   applicationEnvironmentVariables:
+    - AP_SSID: "P2PHotspot"
+    - AP_PASSWORD: ""
     - TZ: America/Brasil
     - SET_HOSTNAME: p2p
-    - PORTAL_SSID: "P2P Hotspot"
-    - PORTAL_LISTENING_PORT: 8081
     - PASSWORD: admin
   defaultDeviceType: raspberry-pi
   supportedDeviceTypes:
     - raspberrypi4-64
+    - raspberrypi3-64
 version: 1.0.1
 
 

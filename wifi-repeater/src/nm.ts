@@ -23,7 +23,7 @@ export interface WiredDevice extends NetworkDevice {
 export interface WirelessNetwork {
   iface: string;
   ssid: string;
-  password?: string;
+  password?: string | null | undefined;
 }
 
 const nm: string = 'org.freedesktop.NetworkManager';
@@ -39,26 +39,33 @@ export const createAccessPoint = async (device: WirelessNetwork): Promise<any> =
       return
     }
 
-    const connectionParams: BodyEntry[] = [
-      ['connection', [
-        ['id', ['s', device.ssid]],
-        ['type', ['s', '802-11-wireless']],
-      ]],
-      ['802-11-wireless', [
-        ['ssid', ['ay', stringToArrayOfBytes(device.ssid)]],
-        ['mode', ['s', 'ap']],
-      ]],
-      ['802-11-wireless-security', [
-        ['key-mgmt', ['s', 'wpa-psk']],
-        ['psk', ['s', device.password]],
-      ]],
-      ['ipv4', [
-        ['method', ['s', 'shared']],
-      ]],
-      ['ipv6', [
-        ['method', ['s', 'ignore']],
-      ]],
+    let connectionParams: BodyEntry[] = [
+      [
+        "connection",
+        [
+          ["id", ["s", device.ssid]],
+          ["type", ["s", "802-11-wireless"]],
+        ],
+      ],
+      [
+        "802-11-wireless",
+        [
+          ["ssid", ["ay", stringToArrayOfBytes(device.ssid)]],
+          ["mode", ["s", "ap"]],
+        ],
+      ],
+      ["ipv4", [["method", ["s", "shared"]]]],
+      ["ipv6", [["method", ["s", "ignore"]]]],
     ];
+    if (device.password) {
+      connectionParams.push([
+        "802-11-wireless-security",
+        [
+          ["key-mgmt", ["s", "wpa-psk"]],
+          ["psk", ["s", device.password]],
+        ],
+      ])
+    }
 
     const dbusPath = await getPathByIface(device.iface);
     const connection = await addConnection(connectionParams);
