@@ -1,12 +1,10 @@
 # Build stage
 FROM balenalib/%%BALENA_MACHINE_NAME%%-debian
 
-RUN apt update -y && apt install -y git apache2
+RUN apt update -y && apt install -y wget unzip apache2
 
-WORKDIR /go/src
-
+WORKDIR /var/run/apache2
 # apache
-RUN mkdir /var/run/apache2
 COPY apache-config/* /etc/apache2/
 
 COPY start.sh .

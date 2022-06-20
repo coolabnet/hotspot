@@ -56,7 +56,7 @@ services:
   portal:
     build: portal
     ports:
-      - '3000:3000'
+      - '80:80'
   # ipfs:
   #   build: ipfs
   #   network_mode: host

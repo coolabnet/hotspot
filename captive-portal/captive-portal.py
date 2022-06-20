@@ -8,10 +8,11 @@ import os
 # These variables are used as settings
 PORT       = 9090         # the port in which the captive portal web server listens
 IFACE      = "wlan0"      # the interface that captive portal protects
-PORT_PORTAL= 3000
+FDROID_IP_1 = "148.251.140.42"
+FDROID_IP_2 = "149.202.95.241"
 
 ip_pipe = subprocess.Popen(['ip', 'r'],  stdout=subprocess.PIPE)
-interface_pipe = subprocess.Popen (['grep', 'wlan0'], stdin=ip_pipe.stdout, stdout=subprocess.PIPE)
+interface_pipe = subprocess.Popen (['grep', IFACE], stdin=ip_pipe.stdout, stdout=subprocess.PIPE)
 IP_ADDRESS = subprocess.check_output (['cut', '-d', ' ', '-f', '9'], stdin=interface_pipe.stdout).split()[0]
 
 '''
@@ -23,13 +24,13 @@ class CaptivePortal(BaseHTTPServer.BaseHTTPRequestHandler):
     html_redirect = """
     <html>
     <head>
-        <meta http-equiv="refresh" content="0; url=http://%s:%s" />
+        <meta http-equiv="refresh" content="0; url=http://%s" />
     </head>
     <body>
         <b>Redirecting to login page</b>
     </body>
     </html>
-    """%(IP_ADDRESS, PORT_PORTAL)
+    """%(IP_ADDRESS)
 
     '''
     if the user requests the login page show it, else
@@ -40,10 +41,7 @@ class CaptivePortal(BaseHTTPServer.BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
-        if path == "/login":
-            self.wfile.write(self.html_login)
-        else:
-            self.wfile.write(self.html_redirect)
+        self.wfile.write(self.html_redirect)
     '''
     this is called when the user submits the login form
     '''
@@ -89,17 +87,15 @@ print ".. Allow UDP DNS"
 subprocess.call(["iptables", "-A", "FORWARD", "-i", IFACE, "-p", "udp", "--dport", "53", "-j" ,"ACCEPT"])
 print ".. Allow traffic to captive portal"
 subprocess.call(["iptables", "-A", "FORWARD", "-i", IFACE, "-p", "tcp", "--dport", str(PORT),"-d", IP_ADDRESS, "-j" ,"ACCEPT"])
+print ".. Allow traffic to F-Droid repositories"
+subprocess.call(["iptables", "-A", "FORWARD", "-i", IFACE, "-p", "tcp", "--dport", "80","-d", FDROID_IP_1, "-j" ,"ACCEPT"])
+subprocess.call(["iptables", "-A", "FORWARD", "-i", IFACE, "-p", "tcp", "--dport", "80","-d", FDROID_IP_2, "-j" ,"ACCEPT"])
 print ".. Block all other traffic"
 subprocess.call(["iptables", "-A", "FORWARD", "-i", IFACE, "-j" ,"DROP"])
 print "Starting web server"
 httpd = BaseHTTPServer.HTTPServer(('', PORT), CaptivePortal)
 print "Redirecting HTTP traffic to captive portal"
 subprocess.call(["iptables", "-t", "nat", "-A", "PREROUTING", "-i", IFACE, "-p", "tcp", "--dport", "80", "-j" ,"DNAT", "--to-destination", IP_ADDRESS+":"+str(PORT)])
-
-# TODO: Allow F-Droid repository IPs
-# 148.251.140.42 149.202.95.241
-# 		$iptables -t mangle -A pirania -m set --match-set pirania-allowlist-$ipvX dst -j RETURN
-#
 
 try:
     httpd.serve_forever()
