@@ -57,15 +57,15 @@ services:
     build: portal
     ports:
       - '80:80'
-  # ipfs:
-  #   build: ipfs
-  #   network_mode: host
-  #   environment:
-  #     APP_UI: "5001/webui"
-  #     APP_TITLE: "Syncronização de arquivos"
-  #   volumes:
-  #     - 'sync-download:/data/ipfs'
-  #     - 'sync-staging:/export'
-  #     - 'media:/data'
-  #   labels:
-  #     io.balena.features.supervisor-api: '1'
+  ipfs:
+    build: ipfs
+    network_mode: host
+    environment:
+      APP_UI: "5001/webui"
+      APP_TITLE: "Syncronização de arquivos"
+    volumes:
+      - 'sync-download:/data/ipfs'
+      - 'sync-staging:/export'
+      - 'media:/data'
+    labels:
+      io.balena.features.supervisor-api: '1'
