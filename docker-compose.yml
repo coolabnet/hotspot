@@ -23,6 +23,9 @@ services:
     privileged: true
     labels:
       io.balena.features.dbus: '1'
+    depends_on:
+      - wifi-repeater
+
   # https://github.com/balenablocks/hostname
   hostname:
     image: balenablocks/hostname
@@ -31,19 +34,6 @@ services:
       io.balena.features.supervisor-api: 1
     environment:
       SET_HOSTNAME: p2p
-  # https://hub.docker.com/r/filebrowser/filebrowser
-  filebrowser:
-    image: filebrowser/filebrowser
-    ports:
-      - 83:80
-    volumes:
-      - media:/srv
-    environment:
-      PGID: 1000
-      PUID: 1000
-      APP_UI: 83
-      APP_TITLE: "Navegador de Arquivos"
-    command: -- c
   # https://hub.docker.com/repository/docker/communityfirst/ssb-go-pub
   ssb:
     image: communityfirst/ssb-go-pub:latest
@@ -69,3 +59,6 @@ services:
       - 'media:/data'
     labels:
       io.balena.features.supervisor-api: '1'
+    depends_on:
+      - wifi-repeater
+
