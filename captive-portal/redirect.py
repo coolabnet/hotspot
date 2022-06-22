@@ -39,7 +39,7 @@ class Redirect(BaseHTTPRequestHandler):
         self.wfile.write(self.html_redirect)
 
 httpdRe = HTTPServer(('', RE_PORT), Redirect)
-print 'started httpserver on'+RE_PORT
+print 'started httpserver on'+str(RE_PORT)
 
 try:
     httpdRe.serve_forever()

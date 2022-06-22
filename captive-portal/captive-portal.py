@@ -23,14 +23,24 @@ This it the http server used by the the captive portal
 '''
 class CaptivePortal(SimpleHTTPRequestHandler):
     '''
+    https://stackoverflow.com/questions/16583827/cors-with-python-basehttpserver-501-unsupported-method-options-in-chrome
+    '''
+    def do_OPTIONS(self):
+        self.send_response(200, "ok")
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
+        self.send_header("Access-Control-Allow-Headers", "X-Requested-With")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        self.end_headers()
+    '''
     this is called when the user submits the login form
     '''
     def do_POST(self):
         self.send_response(200)
-        self.send_header("Content-type", "application/json")
-        # self.send_header('Access-Control-Allow-Origin', '*')
-        # self.send_header('Access-Control-Allow-Headers', 'Authorization, Content-Type')
-        # self.send_header('Access-Control-Allow-Methods', 'POST')
+        self.send_header("Content-Type", "application/json")
+        self.send_header('Access-Control-Allow-Origin', '*')
+        self.send_header('Access-Control-Allow-Headers', 'Authorization, Content-Type')
+        self.send_header('Access-Control-Allow-Methods', 'POST')
         self.end_headers()
         form = cgi.FieldStorage(
             fp=self.rfile,
@@ -78,7 +88,7 @@ print ".. Block all other traffic"
 subprocess.call(["iptables", "-A", "FORWARD", "-i", IFACE, "-j" ,"DROP"])
 print "Starting web server"
 httpd = TCPServer(('', PORT), CaptivePortal)
-print 'started httpserver on'+PORT
+print 'started httpserver on'+str(PORT)
 print "Redirecting HTTP traffic to captive portal"
 subprocess.call(["iptables", "-t", "nat", "-A", "PREROUTING", "-i", IFACE, "-p", "tcp", "--dport", "80", "-j" ,"DNAT", "--to-destination", IP_ADDRESS+":"+str(RE_PORT)])
 
