@@ -5,6 +5,7 @@
 
 ### Balena ###
 .balena
+balena-router/build
 
 ### Linux ###
 *~
