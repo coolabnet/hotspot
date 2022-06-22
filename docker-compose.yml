@@ -38,16 +38,14 @@ services:
     image: communityfirst/ssb-go-pub:latest
     network_mode: host
     environment:
-      APP_JSON: "8813:invite.json"
+      ROOM: "net:room.coolab.org:8008~shs:foHx1HuvaN++iCrQS+Zi916V6iNYEOtj9ZOAo+a0E+Q="
+      PUB: "net:pub.freesocial.co:8008~shs:ofYKOy2p9wsaxV73GqgOyh6C6nRGFM5FyciQyxwBd6A="
     volumes:
       - 'ssb-data:/root/.ssb-go'
     restart: unless-stopped
   ipfs:
     build: ipfs
     network_mode: host
-    environment:
-      APP_UI: "5001/webui"
-      APP_TITLE: "Syncronização de arquivos"
     volumes:
       - 'sync-download:/data/ipfs'
       - 'sync-staging:/export'

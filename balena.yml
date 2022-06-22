@@ -2,12 +2,12 @@ name: P2P Hotpost
 type: sw.application
 description: >-
   P2P Hotspot is a low-energy device that creates an access-point serving p2p applications, bridges and content.
-  Software stack and content are automatically updated while online, and can be updated offline by using usb storage devices.
+  Software stack and content are automatically updated while online.
 assets:
   repository:
     type: blob.asset
     data:
-      url: 'https://github.com/coolabnet/hotpost'
+      url: 'https://github.com/coolabnet/hotspot'
   logo:
     type: blob.asset
     data:
@@ -15,15 +15,17 @@ assets:
         https://raw.githubusercontent.com/coolabnet/hotspot/main/logo.png
 data:
   applicationEnvironmentVariables:
-    - AP_SSID: "P2PHotspot"
+    - AP_SSID: "P2P Hotspot"
     - AP_PASSWORD: ""
     - TZ: America/Brasil
     - SET_HOSTNAME: p2p
-    - PASSWORD: admin
+    - PUB_NAME: "P2P Hotspot"
+    - ROOM: "net:room.coolab.org:8008~shs:foHx1HuvaN++iCrQS+Zi916V6iNYEOtj9ZOAo+a0E+Q="
+    - PUB: "net:pub.freesocial.co:8008~shs:ofYKOy2p9wsaxV73GqgOyh6C6nRGFM5FyciQyxwBd6A="
   defaultDeviceType: raspberry-pi
   supportedDeviceTypes:
     - raspberrypi4-64
     - raspberrypi3-64
-version: 1.0.1
+version: 1.0.2
 
 
