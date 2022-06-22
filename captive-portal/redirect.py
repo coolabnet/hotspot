@@ -4,7 +4,7 @@ from BaseHTTPServer import BaseHTTPRequestHandler, HTTPServer
 import subprocess
 
 RE_PORT    = 9090
-PORT       = 8080
+PORT       = 8081
 IFACE      = "wlan0"      # the interface that captive portal protects
 
 ip_pipe = subprocess.Popen(['ip', 'r'],  stdout=subprocess.PIPE)

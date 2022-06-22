@@ -8,7 +8,7 @@ import os
 
 # These variables are used as settings
 RE_PORT    = 9090
-PORT       = 8080         # the port in which the captive portal web server listens
+PORT       = 8081         # the port in which the captive portal web server listens
 IFACE      = "wlan0"      # the interface that captive portal protects
 FDROID_IP_1 = "148.251.140.42"
 FDROID_IP_2 = "149.202.95.241"
