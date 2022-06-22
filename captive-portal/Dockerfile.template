@@ -1,8 +1,7 @@
 # Build stage
 FROM balenalib/%%BALENA_MACHINE_NAME%%-debian
 
-RUN install_packages python dbus jq python wget iptables
-
+RUN install_packages python dbus jq python wget iptables unzip
 
 ENV DBUS_SYSTEM_BUS_ADDRESS=unix:path=/host/run/dbus/system_bus_socket
 
@@ -12,4 +11,4 @@ RUN update-alternatives --set iptables /usr/sbin/iptables-legacy && \
 WORKDIR /usr/src
 COPY . .
 
-CMD [ "python", "/usr/src/captive-portal.py" ]
+CMD ["bash", "start.sh"]
