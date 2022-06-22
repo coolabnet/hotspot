@@ -23,7 +23,7 @@ services:
     labels:
       io.balena.features.dbus: '1'
     depends_on:
-      - wifi-repeater
+      - wifi
 
   # https://github.com/balenablocks/hostname
   hostname:
@@ -55,5 +55,5 @@ services:
     labels:
       io.balena.features.supervisor-api: '1'
     depends_on:
-      - wifi-repeater
+      - wifi
 
