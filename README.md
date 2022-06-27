@@ -16,6 +16,7 @@ We'll need Internet connection for downloading latest software and content. But 
 - Computer: Raspberry Pi 3 or 4
 - Storage: class 10 micro sd with min 16Gb or SSD connected thru usb
 - (if using SSD && acess-point) Wifi Dongle: a Wifi dongle compatible with the device
+- Internet connection through ethernet cable
 
 *Setup*
 
