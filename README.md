@@ -30,7 +30,18 @@ We'll need Internet connection for downloading latest software and content. But 
 1. Connect to the Internet thru an Ethernet cable
 1. Check Balena dashboard if device is online
 1. Wait for device to update it's software on Balena dashboard
-1. Your device is ready!
+1. Set environment variables (or use defaults)
+
+| Env var | Description | Default |
+| ------------- | ------------- | ------------- |
+| AP_SSID | Access point network name. | `WiFi Repeater` |
+| AP_PASSWORD | Access point network password. | `none` |
+| WIFI_SSID | WiFi network name | |
+| WIFI_PASSWORD | WiFi network password | |
+| PUB_NAME | The SSB's pub name | `P2P Hotspot` |
+| ROOM | Room address where the pub will connnect | `room.coolab.org:8008~shs:foHx1HuvaN++iCrQS+Zi916V6iNYEOtj9ZOAo+a0E+Q=` |
+| PUB | Pub address where the pub will connect | `pub.freesocial.co:8008~shs:ofYKOy2p9wsaxV73GqgOyh6C6nRGFM5FyciQyxwBd6A=` |
+
 
 ## Usage
 
@@ -38,6 +49,33 @@ We'll need Internet connection for downloading latest software and content. But 
 1. Captive-portal with portal should pop-up, if not go to [10.42.0.1:8081](http://10.42.0.1:8081)
 1. Follow guides and install tools on user devices
 
+## Connectivity
+![WiFi Repeater modes of operation](https://github.com/balenalabs/wifi-repeater/raw/master/img/modes.png)
+
+*Uses [wifi-repeater](https://github.com/balenalabs/wifi-repeater)*
+
+Device will automatically scan your network and check each device's capabilities. It will then attempt to configure the devices to work in `Access Point` mode and if that is not possible it will switch to `Repeater` mode. You *do not* need to pre configure the device to work in either mode.
+
+For `Access Point` mode it needs:
+- Internet connectivity via Ethernet
+- Wireless device with AP capabilities (such as the onboard WiFi chip in Raspberry Pi devices)
+
+For `Repeater` mode it needs:
+- Wireless device with AP capabilities (such as the onboard WiFi chip in Raspberry Pi devices)
+- Secondary wireless device and valid credentials for a wireless network.
+
+In case you have no access to an ethernet cable connecting to the routing device, WiFi connection can be set directly inside the SD card by following [this guide](https://www.balena.io/docs/reference/OS/network/#wifi-setup).
+### LED patterns
+
+In case something goes wrong WiFi repeater will produce a series of blinking patterns with the ACT LED (next to PWR LED) to help troubleshoot the issue.
+Valid patterns are the following:
+
+| LED pattern | Problem | Description | Solution (AP mode) | Solution (Repeater mode) |
+| ------------- | ------------- | ------------- | ------------- | ------------- |
+| 2 blinks | Could not find a wireless device with Access Point capabilities | Wireless devices detected don't support Access Point mode. | Use a WiFi chipset that supports AP mode or a WiFi dongle. | Use a WiFi chipset that supports AP mode or a WiFi dongle. |
+| 3 blinks | Could not find a secondary wireless device | Ethernet is disconnected or has no internet access. Switched to repeater mode but could not find a secondary wireless device. | Provide internet access via Ethernet cable. | Provide a secondary wireless device by using a WiFi dongle. |
+| 4 blinks | WiFi credentials for secondary wireless device not provided. | Ethernet is disconnected or has no internet access. Switched to repeater mode but could not find WiFi credentials. | Provide internet access via Ethernet cable. | Provide valid WiFi credentials |
+| 5 blinks | No internet access | Ethernet is disconnected or has no internet access. Switched to repeater mode, connected to WiFi but still have no internet access. | Provide internet access via Ethernet cable. | Ensure the target WiFi has internet access. |
 ## Software stack
 
 ### Operating System
