@@ -108,6 +108,7 @@ Meant to run on [Balena](https://balena.io), which enables easily composing serv
 
 - Make it work offline
 - Portal work on port 80
+- Check for portal and installer updates before attempting to download them
 - Have Internet block work
 - Optionally password protect Internet access
 - Add p2p installer and browser applications ([Dat Installer](https://github.com/staltz/dat-installer) and [Agregore Browser](https://agregore.mauve.moe/) for example)
